@@ -144,3 +144,21 @@ Para que a VPS consiga baixar este projeto (se for privado), precisamos de uma D
     SSH_KEY	        A sua chave PRIVADA SSH (aquela que permite entrar como deployer)
     SSH_USER	deployer  
 
+## 🚀 Como fazer o Deploy
+1. Faça qualquer alteração no código.
+
+2. Faca o Commit e Push para a branch main.
+
+3. Vá na aba Actions do GitHub e veja a mágica acontecer.
+
+4. O script irá:
+
+5. Conectar via SSH na VPS.
+
+6. Atualizar o repositório.
+
+7. Subir/Atualizar o Traefik (infra).
+
+8. Subir/Atualizar a Aplicação de exemplo.
+
+9. O SSL será gerado automaticamente em segundos.
