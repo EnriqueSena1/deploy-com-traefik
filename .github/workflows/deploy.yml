@@ -20,7 +20,7 @@ jobs:
 
             # Clone inicial ou Update do código
             if [ ! -d ".git" ]; then
-              git clone git@github.com:EnriqueSena1/deploy-com-traefik.git .
+              git clone https://github.com/EnriqueSena1/deploy-com-traefik.git .
             else
               git pull origin main
             fi
