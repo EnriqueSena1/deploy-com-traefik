@@ -1,4 +1,5 @@
 name: Deploy Traefik e App
+
 on:
   push:
     branches: [ main ]
@@ -12,21 +13,41 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: deployer
-          key: ${{ secrets.SSH_KEY }} # Chave privada salva no GitHub Secrets
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
-            # Organização por domínio
+            # 1. Garantir que o diretório existe e entrar nele
             mkdir -p ~/mercadomaranataipi.com.br
             cd ~/mercadomaranataipi.com.br
 
-            # Clone inicial ou Update do código
+            # 2. Clone inicial ou Update do código usando HTTPS
+            # Nota: Usar HTTPS evita o erro "Host key verification failed"
             if [ ! -d ".git" ]; then
+              echo "Realizando clone inicial..."
               git clone https://github.com/EnriqueSena1/deploy-com-traefik.git .
             else
-              git pull origin main
+              echo "Atualizando código existente..."
+              git fetch origin main
+              git reset --hard origin/main
             fi
 
-            # Sobe a Infraestrutura (Traefik)
-            cd infra && docker compose up -d
-            
-            # Sobe a Aplicação de Exemplo
-            cd ../app-exemplo && docker compose up -d --build
+            # 3. Subir a Infraestrutura (Traefik)
+            echo "Iniciando Infraestrutura (Traefik)..."
+            if [ -d "infra" ]; then
+              cd infra
+              docker compose up -d
+              cd ..
+            else
+              echo "Erro: Pasta 'infra' não encontrada!"
+              exit 1
+            fi
+
+            # 4. Subir a Aplicação de Exemplo
+            echo "Iniciando Aplicação..."
+            if [ -d "app-exemplo" ]; then
+              cd app-exemplo
+              docker compose up -d --build
+            else
+              echo "Erro: Pasta 'app-exemplo' não encontrada!"
+              exit 1
+            fi
