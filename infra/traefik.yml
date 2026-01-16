@@ -12,7 +12,7 @@ entryPoints:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: SEU_EMAIL@AQUI.COM  # <--- Altere aqui
+      email: mercadosocialmaranata@gmail.com # <--- Altere aqui
       storage: /acme.json
       httpChallenge:
         entryPoint: web

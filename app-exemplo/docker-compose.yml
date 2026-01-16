@@ -1,0 +1,15 @@
+services:
+  app:
+    image: nginx:alpine
+    labels:
+      - "traefik.enable=true"
+      # Altere para seu domínio/subdomínio
+      - "traefik.http.routers.app-exemplo.rule=Host(`www.mercadomaranataipi.com.br`)"
+      - "traefik.http.routers.app-exemplo.entrypoints=websecure"
+      - "traefik.http.routers.app-exemplo.tls.certresolver=letsencrypt"
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
