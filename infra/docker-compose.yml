@@ -1,23 +1,18 @@
-entryPoints:
-  web:
-    address: ":80"
-    http:
-      redirections:
-        entryPoint:
-          to: websecure
-          scheme: https
-  websecure:
-    address: ":443"
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/traefik.yml:ro
+      - ./acme.json:/acme.json
+    networks:
+      - traefik-public
 
-certificatesResolvers:
-  letsencrypt:
-    acme:
-      email: mercadosocialmaranata@gmail.com # <--- Altere aqui
-      storage: /acme.json
-      httpChallenge:
-        entryPoint: web
-
-providers:
-  docker:
-    exposedByDefault: false
-    network: traefik-public
+networks:
+  traefik-public:
+    external: true
